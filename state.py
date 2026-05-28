@@ -1,9 +1,18 @@
 import json
+import sys
 import time
 from dataclasses import dataclass, asdict, field
 from pathlib import Path
 
-CONFIG_PATH = Path(__file__).parent / "config.json"
+
+def _config_dir() -> Path:
+    # quando empacotado pelo PyInstaller, salva config.json ao lado do .exe
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).parent
+    return Path(__file__).parent
+
+
+CONFIG_PATH = _config_dir() / "config.json"
 
 DEFAULTS = {
     "goal_ml": 2000,

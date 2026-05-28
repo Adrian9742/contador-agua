@@ -1,5 +1,14 @@
+import sys
 import time
 import threading
+from pathlib import Path
+
+
+def _assets_dir() -> Path:
+    # quando empacotado pelo PyInstaller, assets ficam em sys._MEIPASS
+    if getattr(sys, "frozen", False):
+        return Path(sys._MEIPASS) / "assets"
+    return Path(__file__).parent / "assets"
 
 try:
     import pygame
@@ -26,8 +35,7 @@ class Notifier:
         if not _PYGAME_AVAILABLE or self._sounds_loaded:
             return
         try:
-            from pathlib import Path
-            assets = Path(__file__).parent / "assets"
+            assets = _assets_dir()
             alert_path = assets / "alert.wav"
             success_path = assets / "success.wav"
             if alert_path.exists():

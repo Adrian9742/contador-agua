@@ -14,3 +14,8 @@ env/
 
 # Config do usuário (gerado em runtime — não versionar)
 config.json
+
+# PyInstaller
+build/
+dist/
+*.spec

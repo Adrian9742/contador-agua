@@ -17,20 +17,20 @@ BTN_CANCEL_B= (185, 210, 238)
 ICON_BG     = (225, 238, 255)
 ICON_COLOR  = (30,  120, 220)
 
-WIN_W, WIN_H   = 540, 800
+WIN_W, WIN_H   = 480, 800
 PANEL_W        = 380
 PANEL_H        = 340
 PANEL_X        = (WIN_W - PANEL_W) // 2
 PANEL_Y        = (WIN_H - PANEL_H) // 2
 
 FIELD_CONFIGS = [
-    {"icon": "🎯", "label": "Meta diária (ml)",
-     "hint": "Quantidade de água que deseja beber por dia.",
+    {"icon": "M",  "label": "Meta diaria (ml)",
+     "hint": "Quantidade de agua que deseja beber por dia.",
      "attr": "goal_ml",       "min": 100,  "max": 10000},
-    {"icon": "⏱",  "label": "Intervalo de lembrete (min)",
-     "hint": "Tempo entre os lembretes para beber água.",
+    {"icon": "T",  "label": "Intervalo de lembrete (min)",
+     "hint": "Tempo entre os lembretes para beber agua.",
      "attr": "interval_min",  "min": 1,    "max": 480},
-    {"icon": "💧", "label": "Volume do copo rápido (ml)",
+    {"icon": "C",  "label": "Volume do copo rapido (ml)",
      "hint": 'Quantidade adicionada ao clicar em "Bebi!".',
      "attr": "default_cup_ml","min": 50,   "max": 2000},
 ]
@@ -185,8 +185,7 @@ class ConfigScreen:
         pygame.draw.rect(surface, PANEL_BG, panel, border_radius=20)
         pygame.draw.rect(surface, PANEL_BORDER, panel, 1, border_radius=20)
 
-        # título com ícone de gota
-        title = self._font_title.render("💧  Configurações", True, TEXT_DARK)
+        title = self._font_title.render("Configuracoes", True, TEXT_DARK)
         surface.blit(title, title.get_rect(centerx=WIN_W // 2, y=PANEL_Y + 16))
 
         # linha separadora
@@ -200,11 +199,10 @@ class ConfigScreen:
 
         # botão Salvar
         pygame.draw.rect(surface, BTN_SAVE, self._btn_save, border_radius=10)
-        save_lbl = self._font_lbl.render("✓  Salvar alterações", True, (255, 255, 255))
+        save_lbl = self._font_lbl.render("Salvar alteracoes", True, (255, 255, 255))
         surface.blit(save_lbl, save_lbl.get_rect(center=self._btn_save.center))
 
-        # botão Cancelar
         pygame.draw.rect(surface, BTN_CANCEL, self._btn_cancel, border_radius=10)
         pygame.draw.rect(surface, BTN_CANCEL_B, self._btn_cancel, 1, border_radius=10)
-        cancel_lbl = self._font_lbl.render("✕  Cancelar", True, TEXT_MED)
+        cancel_lbl = self._font_lbl.render("Cancelar", True, TEXT_MED)
         surface.blit(cancel_lbl, cancel_lbl.get_rect(center=self._btn_cancel.center))

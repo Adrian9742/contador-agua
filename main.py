@@ -10,7 +10,7 @@ from config_screen import ConfigScreen
 
 
 FPS = 60
-WINDOW_TITLE = "Contador de Água 💧"
+WINDOW_TITLE = "Contador de Agua"
 
 
 def _midnight_reset_check(state: AppState) -> None:

@@ -5,7 +5,7 @@ import pygame
 from state import AppState
 from notifier import Notifier
 from timer_manager import TimerManager
-from renderer import Renderer, WIN_W, WIN_H, init_fonts
+from renderer import Renderer, WIN_W, WIN_H, init_fonts  # WIN_H agora é 780
 from config_screen import ConfigScreen
 
 

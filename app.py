@@ -5,7 +5,7 @@ streak card com 7 dias e ícones renderizados com anti-alias via Pillow.
 """
 import customtkinter as ctk
 import tkinter as tk
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageTk
 import math, time
 from state import AppState
 from timer_manager import TimerManager
@@ -46,11 +46,19 @@ def _rgb(hex_color: str) -> tuple:
 
 
 def _icon(fn, w: int, h: int) -> ctk.CTkImage:
-    """Renderiza a 2× e reduz (anti-alias barato)."""
+    """Renderiza a 2× e reduz (anti-alias barato). Retorna CTkImage para CTk widgets."""
     img = Image.new("RGBA", (w * 2, h * 2), (0, 0, 0, 0))
     fn(ImageDraw.Draw(img), w * 2, h * 2)
     img = img.resize((w, h), Image.LANCZOS)
     return ctk.CTkImage(light_image=img, dark_image=img, size=(w, h))
+
+
+def _icon_tk(fn, w: int, h: int) -> ImageTk.PhotoImage:
+    """Mesmo que _icon mas retorna ImageTk.PhotoImage para uso em tk.Canvas."""
+    img = Image.new("RGBA", (w * 2, h * 2), (0, 0, 0, 0))
+    fn(ImageDraw.Draw(img), w * 2, h * 2)
+    img = img.resize((w, h), Image.LANCZOS)
+    return ImageTk.PhotoImage(img)
 
 
 def ico_drop(size=18, color=A2):
@@ -103,6 +111,16 @@ def ico_check(size=14, color="#ffffff"):
         pts = [(int(w*.15),int(h*.50)), (int(w*.42),int(h*.78)), (int(w*.85),int(h*.22))]
         d.line(pts, fill=c, width=t)
     return _icon(fn, size, size)
+
+
+def ico_check_tk(size=14, color="#ffffff") -> ImageTk.PhotoImage:
+    """Versão para tk.Canvas (ImageTk.PhotoImage)."""
+    def fn(d, w, h):
+        c = _rgb(color)
+        t = max(2, w // 8)
+        pts = [(int(w*.15),int(h*.50)), (int(w*.42),int(h*.78)), (int(w*.85),int(h*.22))]
+        d.line(pts, fill=c, width=t)
+    return _icon_tk(fn, size, size)
 
 
 def ico_cup(size=22, kind="m", color=A2):
@@ -389,15 +407,14 @@ class App(ctk.CTk):
         left = ctk.CTkFrame(bar, fg_color="transparent")
         left.pack(side="left", padx=14)
 
-        # ícone gota azul no quadrado arredondado
-        dot_c = tk.Canvas(left, width=26, height=26, bg="#2563eb",
-                          highlightthickness=0)
-        dot_c.pack(side="left")
-        # round corners trick via tag
-        dot_c.configure(bg="#2563eb")
-        dot_img = ico_drop(14, "#ffffff")
-        dot_c.create_image(13, 13, image=dot_img)
-        dot_c._img = dot_img
+        # ícone gota — CTkFrame arredondado + CTkLabel (evita tk.Canvas aqui)
+        dot_box = ctk.CTkFrame(left, width=26, height=26, corner_radius=7, fg_color=AC)
+        dot_box.pack(side="left")
+        dot_box.pack_propagate(False)
+        drop_img = ico_drop(14, "#ffffff")
+        drop_lbl = ctk.CTkLabel(dot_box, image=drop_img, text="")
+        drop_lbl.place(relx=.5, rely=.5, anchor="center")
+        drop_lbl._img = drop_img
 
         ctk.CTkLabel(left, text="  Contador de Agua", text_color=T,
                      font=(FONT, 13, "bold")).pack(side="left")
@@ -615,9 +632,9 @@ class App(ctk.CTk):
             ring_cv.create_oval(2, 2, 34, 34, fill=c_bg, outline=c_ring, width=2)
 
             if status == "done":
-                chk = ico_check(12, "#ffffff")
+                chk = ico_check_tk(12, "#ffffff")
                 ring_cv.create_image(18, 18, image=chk)
-                ring_cv._img = chk
+                ring_cv._img = chk  # mantém referência para evitar GC
             elif status == "today":
                 p = int(s.percent() * 100)
                 ring_cv.create_text(18, 18, text=f"{p}%", fill=c_txt,
@@ -633,8 +650,8 @@ class App(ctk.CTk):
         if status == "done":
             return AC, A2, "#ffffff"
         elif status == "today":
-            ring = (30, 200, 100) if s.goal_reached else AC
-            return S2, _rgb_css(ring), A2
+            ring = "#1ec864" if s.goal_reached else AC   # hex direto, sem _rgb_css
+            return S2, ring, A2
         else:
             return S, BD, FA
 

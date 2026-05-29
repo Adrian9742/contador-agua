@@ -68,15 +68,47 @@ def _glass_water(d, k, color, t):
 
 def _droplet(d, k, color, t):
     c = _rgba(color)
-    # path: M12 3 — pico no topo, círculo r=6 centrado em (12,14)
-    # lado direito: bezier de (12,3) até (18,14)
-    r_curve = _bez3((12*k, 3*k), (18*k, 5*k), (18*k, 10*k), (18*k, 14*k))
-    # arco inferior: de (18,14) até (6,14) passando por (12,20)
-    arc = _arc_pts(12*k, 14*k, 6*k, 6*k, 0, 180, n=24)
-    # lado esquerdo: bezier de (6,14) até (12,3)
-    l_curve = _bez3((6*k, 14*k), (6*k, 10*k), (6*k, 5*k), (12*k, 3*k))
-    pts = r_curve + arc + l_curve
-    d.polygon(pts, outline=c, width=t)
+    # Lucide path: M12 3 s6 6.5 6 11  a6 6 0 0 1 -12 0  c0 -4.5 6 -11 6 -11 z
+    # lado direito: smooth-cubic de (12,3)→(18,14), ctrl1=(12,3) ctrl2=(18,9.5)
+    right = _bez3((12*k, 3*k), (12*k, 3*k), (18*k, 9.5*k), (18*k, 14*k))
+    # arco inferior: de (18,14) até (6,14) passando por (12,20), sentido horário
+    arc = _arc_pts(12*k, 14*k, 6*k, 6*k, 0, 180, n=28)
+    # lado esquerdo: cubic de (6,14)→(12,3), ctrl1=(6,9.5) ctrl2=(12,3)
+    left = _bez3((6*k, 14*k), (6*k, 9.5*k), (12*k, 3*k), (12*k, 3*k))
+    # stroke puro — usa line, não polygon
+    pts = right + arc[1:] + left[1:]
+    d.line(pts, fill=c, width=t)
+    # caps arredondados no início e fim
+    r = max(1, t // 2)
+    for px, py in [pts[0], pts[-1]]:
+        d.ellipse([px-r, py-r, px+r, py+r], fill=c)
+
+
+def _cup_filled(d, k, color, t):
+    """Copo com água visível — para 'Dose'."""
+    c = _rgba(color)
+    # Trapézio (mesmas proporções de glass-water)
+    tl, tr = 6*k,  18*k
+    bl, br = 7.2*k, 16.8*k
+    ty, by = 3*k,  19.2*k
+
+    # Linha de nível da água a 62% de altura (de baixo para cima)
+    wfrac   = 0.38                # 38% do topo = 62% cheio
+    wy      = ty + (by - ty) * wfrac
+    wl      = tl + (bl - tl) * wfrac
+    wr      = tr + (br - tr) * wfrac
+
+    # Fill de água (semi-transparente)
+    water   = [(wl, wy), (wr, wy), (br, by), (bl, by)]
+    d.polygon(water, fill=(*c[:3], 70))
+
+    # Contorno do copo
+    poly = [(tl, ty), (tr, ty), (br, by), (bl, by)]
+    for i in range(len(poly)):
+        d.line([poly[i], poly[(i+1) % len(poly)]], fill=c, width=t)
+
+    # Linha do nível da água
+    d.line([(wl, wy), (wr, wy)], fill=c, width=t)
 
 
 def _bottle_water(d, k, color, t):
@@ -172,6 +204,7 @@ def _refresh_ccw(d, k, color, t):
 _DRAW_FNS = {
     "glass-water":  _glass_water,
     "droplet":      _droplet,
+    "cup-filled":   _cup_filled,
     "bottle-water": _bottle_water,
     "flame":        _flame,
     "sun":          _sun,

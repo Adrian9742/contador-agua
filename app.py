@@ -71,10 +71,10 @@ THEMES = {
 
 FONT  = "Segoe UI"
 CHIPS = [
-    {"ml": 200, "label": "Copo",    "icon": "glass-water"},
-    {"ml": 250, "label": "Gole",    "icon": "droplet"},
-    {"ml": 500, "label": "Dose",    "icon": "droplet"},
-    {"ml": 750, "label": "Garrafa", "icon": "bottle-water"},
+    {"ml": 200, "label": "Copo",    "icon": "glass-water"},  # copo vazio c/ linha
+    {"ml": 250, "label": "Gole",    "icon": "droplet"},       # gota de água
+    {"ml": 500, "label": "Dose",    "icon": "cup-filled"},    # copo c/ água visível
+    {"ml": 750, "label": "Garrafa", "icon": "bottle-water"},  # garrafa
 ]
 
 

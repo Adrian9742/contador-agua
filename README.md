@@ -2,9 +2,9 @@
 
 App desktop para Windows que te lembra de beber água durante o dia — ideal pra quem passa horas na frente do PC e esquece de se hidratar.
 
-<!-- 📸 Adicione prints na pasta docs/ e descomente as linhas abaixo -->
-<!-- ![Tela principal](docs/screenshot-main.png) -->
-<!-- ![Histórico 30 dias](docs/screenshot-history.png) -->
+![Tela principal](docs/screenshot-main.png)
+![Streak de dias](docs/screenshot-main2.png)
+![Histórico 30 dias](docs/screenshot-history.png)
 
 ## ✨ Funcionalidades
 

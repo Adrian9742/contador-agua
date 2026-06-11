@@ -1,7 +1,7 @@
 "use client"
 
 import { Flame, Check } from "lucide-react"
-import type { DayInfo } from "@/hooks/useWaterState"
+import type { DayInfo } from "@/lib/types"
 
 interface StreakCardProps {
   days: DayInfo[]

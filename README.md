@@ -57,7 +57,7 @@ Clique no ícone de engrenagem (⚙️) para ajustar:
 
 ```bash
 # Instalar dependências
-cd app-de-agua
+cd desktop
 pnpm install
 
 # Rodar em modo dev (Next.js + Electron juntos)
@@ -70,22 +70,44 @@ pnpm electron:build
 
 **Requisitos:** Node.js 18+, pnpm 11+
 
+## 🏗️ Arquitetura
+
+| Camada | Onde | O que faz |
+|---|---|---|
+| **Lógica pura** | `desktop/lib/` | Tipos, constantes, cálculos de data/streak/stats, abstração de storage — sem React, sem Electron, testável isoladamente |
+| **Estado React** | `desktop/hooks/useWaterState.ts` | Fino: apenas `useState`/`useEffect` + chamadas à `lib/` |
+| **UI por feature** | `desktop/components/` | `bottle/`, `controls/`, `history/`, `settings/` — cada pasta cuida do próprio pedaço visual |
+| **Processo principal** | `desktop/electron/` | Módulos separados: `window`, `tray`, `reminders`, `store`, `ipc` — `main.js` é só bootstrap |
+| **Bridge IPC** | `desktop/electron/preload.js` | Expõe `window.electronAPI` para o React se comunicar com o processo principal |
+
 ## 📁 Estrutura do projeto
 
 ```
 contador-agua/
-├── app-de-agua/          # Frontend Next.js + Electron
-│   ├── app/              # Pages (Next.js App Router)
-│   ├── components/       # water-tracker, history-modal, water-bottle, streak-card...
-│   ├── hooks/            # useWaterState.ts — lógica central + persistência
+├── desktop/                  # 🖥 App Electron + Next.js (versão atual)
+│   ├── lib/                  # Lógica pura (types, constants, dates, stats, storage)
+│   ├── hooks/                # useWaterState.ts — estado React fino
+│   ├── components/
+│   │   ├── water-tracker.tsx # Orquestrador principal
+│   │   ├── bottle/           # Garrafa animada
+│   │   ├── controls/         # Botões rápidos + entrada manual
+│   │   ├── history/          # Modal + gráfico SVG 30 dias
+│   │   ├── settings/         # Modal de meta/intervalo
+│   │   └── streak-card.tsx   # Card de sequência de dias
 │   ├── electron/
-│   │   ├── main.js       # Processo principal: janela, tray, timer, IPC
-│   │   └── preload.js    # Bridge contextBridge → renderer
-│   └── assets/           # icon.ico, alert.wav, success.wav
-├── assets/               # Ícone fonte (.png → .ico)
-├── app.py                # Versão Python (customtkinter) — legado
-├── state.py              # Estado e persistência Python
-└── history_dialog.py     # Modal de histórico Python
+│   │   ├── main.js           # Bootstrap (instância única, inicialização)
+│   │   ├── window.js         # Criação da janela
+│   │   ├── tray.js           # Bandeja do sistema
+│   │   ├── reminders.js      # Timer de lembretes + reset à meia-noite
+│   │   ├── store.js          # Leitura/escrita JSON em AppData
+│   │   ├── ipc.js            # Handlers IPC centralizados
+│   │   └── preload.js        # Bridge window.electronAPI
+│   ├── app/                  # Next.js App Router
+│   ├── assets/               # icon.ico, sons, icon_source.png
+│   └── public/               # Ícones web
+├── legacy-python/            # 🐍 Versão Python original (somente referência)
+├── docs/                     # 📸 Screenshots
+└── README.md
 ```
 
 ## 📝 Licença

@@ -90,4 +90,4 @@ contador-agua/
 
 ## 📝 Licença
 
-MIT — use, modifique e distribua à vontade.
+MIT © [Adrian Souza](https://github.com/Adrian9742) — use, modifique e distribua à vontade.

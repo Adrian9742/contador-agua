@@ -289,7 +289,7 @@ export function WaterTracker() {
           <StreakCard days={last7Days} streak={streak} bestStreak={bestStreak} />
 
           {/* Footer */}
-          <footer className="flex justify-center pb-2">
+          <footer className="flex flex-col items-center gap-2 pb-2">
             <button
               onClick={resetDay}
               className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
@@ -297,6 +297,9 @@ export function WaterTracker() {
               <RefreshCw className="h-4 w-4" />
               Resetar dia
             </button>
+            <p className="text-[11px] text-muted-foreground/50 select-none">
+              © {new Date().getFullYear()} Adrian Souza
+            </p>
           </footer>
         </main>
       </div>

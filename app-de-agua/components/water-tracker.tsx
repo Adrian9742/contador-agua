@@ -17,10 +17,12 @@ import {
   Target,
   Clock,
   Trophy,
+  BarChart2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { WaterBottle } from "@/components/water-bottle"
 import { StreakCard } from "@/components/streak-card"
+import { HistoryModal } from "@/components/history-modal"
 import { useWaterState } from "@/hooks/useWaterState"
 
 const quickAdds = [
@@ -39,6 +41,7 @@ export function WaterTracker() {
     remaining,
     streak,
     last7Days,
+    dailyHistory,
     goalReached,
     countdownStr,
     bestStreak,
@@ -52,6 +55,7 @@ export function WaterTracker() {
   const [dark, setDark] = useState(true)
   const [manual, setManual] = useState("")
   const [showSettings, setShowSettings] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
   const [goalInput, setGoalInput] = useState("")
   const [intervalInput, setIntervalInput] = useState("")
 
@@ -90,6 +94,18 @@ export function WaterTracker() {
   return (
     <div className={dark ? "dark" : ""}>
       <div className="mx-auto min-h-screen w-full max-w-[440px] bg-background text-foreground">
+
+        {/* History Modal */}
+        {showHistory && (
+          <HistoryModal
+            dailyHistory={dailyHistory ?? {}}
+            goalMl={goalMl}
+            consumedMl={consumedMl}
+            streak={streak}
+            bestStreak={bestStreak}
+            onClose={() => setShowHistory(false)}
+          />
+        )}
 
         {/* Settings Modal */}
         {showSettings && (
@@ -179,6 +195,13 @@ export function WaterTracker() {
                 🎉 Meta atingida!
               </div>
             )}
+            <button
+              onClick={() => setShowHistory(true)}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-secondary"
+              aria-label="Histórico"
+            >
+              <BarChart2 className="h-4 w-4" />
+            </button>
             <button
               onClick={() => setDark((d) => !d)}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-secondary"

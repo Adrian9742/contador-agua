@@ -47,8 +47,11 @@ class AppState:
             cb()
 
     def close_day(self) -> None:
-        today = date.today().isoformat()
-        self.daily_history[today] = {
+        self._close_day_for(date.today())
+
+    def _close_day_for(self, for_date: date) -> None:
+        key = for_date.isoformat()
+        self.daily_history[key] = {
             "consumed": self.consumed_ml,
             "goal": self.goal_ml,
         }
@@ -112,6 +115,8 @@ class AppState:
             "default_cup_ml": self.default_cup_ml,
             "best_streak": self.best_streak,
             "daily_history": self.daily_history,
+            "consumed_ml": self.consumed_ml,
+            "saved_date": date.today().isoformat(),
         }
         CONFIG_PATH.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
@@ -121,12 +126,36 @@ class AppState:
             return cls()
         try:
             data = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-            return cls(
+            state = cls(
                 goal_ml=int(data.get("goal_ml", DEFAULTS["goal_ml"])),
                 interval_min=int(data.get("interval_min", DEFAULTS["interval_min"])),
                 default_cup_ml=int(data.get("default_cup_ml", DEFAULTS["default_cup_ml"])),
                 best_streak=int(data.get("best_streak", 0)),
                 daily_history=data.get("daily_history", {}),
+                consumed_ml=int(data.get("consumed_ml", 0)),
             )
+            saved_date_str = data.get("saved_date", date.today().isoformat())
+            saved_date = date.fromisoformat(saved_date_str)
+            today = date.today()
+            if saved_date < today:
+                # Salva o último dia ativo com o consumo real
+                state._close_day_for(saved_date)
+                # Preenche os dias perdidos (entre saved_date+1 e ontem) como zero
+                gap_day = saved_date + timedelta(days=1)
+                yesterday = today - timedelta(days=1)
+                while gap_day <= yesterday:
+                    key = gap_day.isoformat()
+                    if key not in state.daily_history:
+                        state.daily_history[key] = {
+                            "consumed": 0,
+                            "goal": state.goal_ml,
+                        }
+                    gap_day += timedelta(days=1)
+                state.consumed_ml = 0
+                state.goal_reached = False
+            else:
+                # Restaura progresso do dia atual
+                state.goal_reached = state.consumed_ml >= state.goal_ml
+            return state
         except (json.JSONDecodeError, ValueError):
             return cls()

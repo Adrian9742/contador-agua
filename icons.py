@@ -184,6 +184,18 @@ def _check(d, k, color, t):
     d.line([(5*k,13*k),(9*k,17*k),(19*k,7*k)], fill=c, width=max(t, round(k*2.5)))
 
 
+def _bar_chart(d, k, color, t):
+    c = _rgba(color)
+    bars = [
+        (4*k, 15*k, 8*k, 21*k),
+        (9*k, 10*k, 13*k, 21*k),
+        (14*k, 5*k, 18*k, 21*k),
+    ]
+    for x1, y1, x2, y2 in bars:
+        d.rectangle([x1, y1, x2, y2], outline=c, width=t)
+    d.line([(3*k, 21*k), (19*k, 21*k)], fill=c, width=t)
+
+
 def _refresh_ccw(d, k, color, t):
     c = _rgba(color)
     # arco superior: de (3.5,8) rotacionando pelo centro (12,12)
@@ -211,6 +223,7 @@ _DRAW_FNS = {
     "moon":         _moon,
     "settings":     _settings,
     "check":        _check,
+    "bar-chart":    _bar_chart,
     "refresh-ccw":  _refresh_ccw,
 }
 

@@ -9,11 +9,13 @@ import customtkinter as ctk
 import tkinter as tk
 from PIL import Image, ImageDraw, ImageTk
 import math, time
+from datetime import date
 
 from state import AppState
 from timer_manager import TimerManager
 from notifier import Notifier
 from icons import get_icon, clear_cache
+from history_dialog import HistoryDialog
 
 ctk.set_appearance_mode("dark")
 
@@ -361,6 +363,16 @@ class App(ctk.CTk):
         c_btn.pack(side="right", padx=3)
         c_btn._img = c_ico
 
+        # Botão histórico
+        h_ico = get_icon("bar-chart", 16, th["muted"])
+        h_btn = ctk.CTkButton(
+            right, image=h_ico, text="", width=34, height=34,
+            corner_radius=10, fg_color=th["surface"],
+            border_width=1, border_color=th["border"],
+            hover_color=th["surface2"], command=self._open_history)
+        h_btn.pack(side="right", padx=3)
+        h_btn._img = h_ico
+
         self._cd_lbl = ctk.CTkLabel(right, text="", text_color=th["faint"],
                                      font=(FONT,11))
         self._cd_lbl.pack(side="right", padx=8)
@@ -497,6 +509,7 @@ class App(ctk.CTk):
 
     # ── poll (400ms, sem destruir widgets) ────────────────────────────────────
     def _poll(self):
+        self._check_midnight()
         s  = self._state
         th = self._th()
         if not self._hero_lbl:
@@ -601,6 +614,19 @@ class App(ctk.CTk):
 
     def _open_config(self):
         ConfigDialog(self, self._state, self._th())
+
+    def _open_history(self):
+        HistoryDialog(self, self._state, self._th())
+
+    def _check_midnight(self):
+        today = date.today()
+        if not hasattr(self, "_current_date"):
+            self._current_date = today
+            return
+        if today > self._current_date:
+            self._state.reset_day()
+            self._state.save()
+            self._current_date = today
 
     def _on_close(self):
         self._timer.stop()

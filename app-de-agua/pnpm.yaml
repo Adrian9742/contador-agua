@@ -1,3 +1,6 @@
 onlyBuiltDependencies:
+  - electron
+  - electron-builder
+  - electron-winstaller
   - msw
   - sharp

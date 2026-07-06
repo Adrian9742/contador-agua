@@ -23,14 +23,18 @@ self.addEventListener("activate", (event) => {
 })
 
 self.addEventListener("fetch", (event) => {
+  // Só faz cache de requisições GET (navegação e assets)
+  if (event.request.method !== "GET") return
+
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      // Tenta rede primeiro, fallback pra cache
       return fetch(event.request)
         .then((res) => {
-          // Atualiza cache com resposta nova
-          const clone = res.clone()
-          caches.open(CACHE).then((cache) => cache.put(event.request, clone))
+          // Só cacheia respostas válidas
+          if (res.ok) {
+            const clone = res.clone()
+            caches.open(CACHE).then((cache) => cache.put(event.request, clone))
+          }
           return res
         })
         .catch(() => cached || new Response("Offline", { status: 503 }))

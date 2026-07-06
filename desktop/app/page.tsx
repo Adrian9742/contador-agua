@@ -100,15 +100,19 @@ export default function LandingPage() {
           </div>
           <div className="flex flex-col gap-4 md:w-1/2">
             <div className="inline-flex w-fit rounded-full bg-[#38bdf8]/10 px-3 py-1 text-xs text-[#38bdf8]">
-              📍 Uso real
+              📊 Segundo a ciência
             </div>
             <p className="text-lg leading-relaxed text-muted-foreground md:text-xl">
-              "Eu passo o dia no escritório e sempre esquecia de beber água. 
-              Agora o app me lembra a cada 30 min e meu histórico mostra 
-              que estou bebendo <strong className="text-foreground">3x mais</strong> do que antes."
+              "A desidratação leve já prejudica o foco, a memória e o humor. 
+              Manter-se hidratado ao longo do dia melhora a produtividade 
+              em até <strong className="text-foreground">14%</strong> 
+              segundo estudos da Universidade de Harvard."
             </p>
-            <p className="text-sm text-foreground">
-              <strong>Adrian</strong> — <span className="text-muted-foreground">Criador do Contador de Água</span>
+            <p className="text-sm text-muted-foreground">
+              <ExternalLink className="inline h-3.5 w-3.5" /> Fonte: 
+              <a href="https://www.hsph.harvard.edu/nutritionsource/water/" target="_blank" className="text-[#38bdf8] hover:underline">
+                Harvard T.H. Chan School of Public Health
+              </a>
             </p>
           </div>
         </div>

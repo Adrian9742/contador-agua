@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Droplets, Settings, BarChart2, LogOut, Bell, RefreshCw } from "lucide-react"
+import Link from "next/link"
+import { Droplets, Settings, BarChart2, LogOut, Bell, RefreshCw, LogIn } from "lucide-react"
 import { WaterBottle }   from "@/components/bottle"
 import { Controls }      from "@/components/controls"
 import { HistoryModal }  from "@/components/history"
@@ -73,9 +74,35 @@ export function WaterTracker() {
         <div className="flex items-center gap-1.5">
           <HeaderBtn onClick={() => setShowHistory(true)}  title="Histórico"><BarChart2 className="h-4 w-4" /></HeaderBtn>
           <HeaderBtn onClick={() => setShowSettings(true)} title="Configurações"><Settings className="h-4 w-4" /></HeaderBtn>
-          <HeaderBtn onClick={signOut} title="Sair"><LogOut className="h-4 w-4" /></HeaderBtn>
+          {user ? (
+            <HeaderBtn onClick={signOut} title="Sair"><LogOut className="h-4 w-4" /></HeaderBtn>
+          ) : (
+            <Link
+              href="/auth"
+              className="flex h-9 items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#2563eb] px-3 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              <LogIn className="h-3.5 w-3.5" />
+              Entrar
+            </Link>
+          )}
         </div>
       </header>
+
+      {!user && (
+        <div className="mx-5 mt-3 flex items-center gap-2 rounded-xl border border-[#38bdf8]/20 bg-[#38bdf8]/5 px-4 py-2.5 md:mx-0">
+          <span className="text-lg">💾</span>
+          <p className="flex-1 text-xs text-muted-foreground">
+            <strong className="text-foreground">Dados salvos no navegador.</strong>{" "}
+            Crie uma conta para sincronizar seu histórico entre dispositivos.
+          </p>
+          <Link
+            href="/auth"
+            className="shrink-0 rounded-lg bg-gradient-to-r from-[#38bdf8] to-[#2563eb] px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+          >
+            Criar conta
+          </Link>
+        </div>
+      )}
 
       <main className="flex flex-col gap-5 px-5 py-5 md:px-0">
 
@@ -102,13 +129,11 @@ export function WaterTracker() {
           </div>
         )}
 
-        {/* ── Grid responsivo: desktop 2 colunas ──────────── */}
+        {/* ── Grid responsivo ──────────────────────────────── */}
         <div className="flex flex-col gap-5 md:flex-row md:items-start">
 
-          {/* Coluna da esquerda — consumo + garrafa */}
+          {/* Coluna esquerda — consumo + garrafa */}
           <div className="flex flex-col gap-5 md:w-1/2">
-
-            {/* Consumo */}
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[40px] font-extrabold leading-none tracking-tight text-foreground md:text-5xl">
@@ -131,16 +156,13 @@ export function WaterTracker() {
                 🫗
               </div>
             </div>
-
-            {/* Garrafa — grows a bit on desktop */}
             <div className="scale-100 md:scale-110 md:origin-left">
               <WaterBottle percentage={percent} goal={goalMl} />
             </div>
           </div>
 
-          {/* Coluna da direita — controles + streak */}
+          {/* Coluna direita — controles + streak */}
           <div className="flex flex-col gap-5 md:w-1/2 md:pt-12">
-            {/* Timer de mais destaque no desktop */}
             {!goalReached && (
               <div className="hidden md:flex items-center gap-2 rounded-2xl border border-border bg-card p-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#38bdf8]/10 text-2xl">⏰</div>
@@ -150,7 +172,6 @@ export function WaterTracker() {
                 </div>
               </div>
             )}
-
             <Controls goalReached={goalReached} onAdd={addWater} />
             <StreakCard days={last7Days} streak={streak} bestStreak={bestStreak} />
           </div>

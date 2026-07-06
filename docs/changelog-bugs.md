@@ -22,3 +22,17 @@
 - **Causa:** Incompatibilidade de versão entre `@supabase/ssr@0.6.1` e `@supabase/supabase-js@2.110.0` nos tipos internos
 - **Solução:** Nenhuma necessária — `tsconfig.json` tem `skipLibCheck: true` e `ignoreBuildErrors: true`, o build compila sem erros
 - **Prevenção:** Se um dia remover `ignoreBuildErrors`, atualizar `@supabase/ssr` pra versão mais recente
+
+## [2025-07-06] AuthGuard.tsx não é mais usado
+- **Onde:** `components/auth/auth-guard.tsx`
+- **O que:** Arquivo ficou como código morto após tornar login opcional
+- **Causa:** Ao remover AuthGuard do `/app`, o componente deixou de ser importado
+- **Solução:** Removido o arquivo
+- **Prevenção:** Verificar imports ao refatorar fluxo de auth
+
+## [2025-07-06] AuthProvider sem memo no contexto
+- **Onde:** `hooks/useAuth.tsx`
+- **O que:** Objeto de contexto recriado a cada render, causando re-renders desnecessários
+- **Causa:** `signOut` recriado a cada render sem `useCallback`
+- **Solução:** Envolver `signOut` com `useCallback`
+- **Prevenção:** Sempre memoizar valores de contexto

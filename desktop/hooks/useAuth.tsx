@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useCallback, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { getSupabase } from "@/lib/supabase"
 import type { Session, User } from "@/lib/supabase"
@@ -43,10 +43,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe()
   }, [router])
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     await getSupabase().auth.signOut()
     router.push("/auth")
-  }
+  }, [router])
 
   return (
     <AuthContext.Provider value={{ user, session, loading, signOut }}>

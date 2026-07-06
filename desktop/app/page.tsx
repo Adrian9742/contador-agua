@@ -157,13 +157,61 @@ export default function LandingPage() {
         <p className="mb-10 text-lg text-muted-foreground">
           Em 4 passos simples você cria o hábito de se hidratar.
         </p>
-        <div className="mx-auto max-w-3xl">
-          <img
-            src="/how-it-works.svg"
-            alt="Ciclo do app: lembrete → beber → garrafa enche → streak"
-            className="w-full"
-          />
+
+        {/* Passos em HTML direto (mais confiável que SVG) */}
+        <div className="flex flex-col items-center gap-6 md:flex-row md:gap-4">
+
+          {/* Passo 1 */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-card text-3xl shadow-lg shadow-[#38bdf8]/5">
+              🔔
+            </div>
+            <p className="text-sm font-semibold text-foreground">Lembrete</p>
+            <p className="text-xs text-muted-foreground">A cada 30 min</p>
+          </div>
+
+          {/* Seta */}
+          <div className="hidden text-2xl text-muted-foreground/30 md:block">→</div>
+          <div className="block text-2xl text-muted-foreground/30 md:hidden">↓</div>
+
+          {/* Passo 2 */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-card text-3xl shadow-lg shadow-[#38bdf8]/5">
+              🥤
+            </div>
+            <p className="text-sm font-semibold text-foreground">Beber</p>
+            <p className="text-xs text-muted-foreground">200 / 250 / 500 / 750 ml</p>
+          </div>
+
+          {/* Seta */}
+          <div className="hidden text-2xl text-muted-foreground/30 md:block">→</div>
+          <div className="block text-2xl text-muted-foreground/30 md:hidden">↓</div>
+
+          {/* Passo 3 */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-card text-3xl shadow-lg shadow-[#38bdf8]/5">
+              🫗
+            </div>
+            <p className="text-sm font-semibold text-foreground">Garrafa enche</p>
+            <p className="text-xs text-muted-foreground">+10% / +20% / +30%</p>
+          </div>
+
+          {/* Seta */}
+          <div className="hidden text-2xl text-muted-foreground/30 md:block">→</div>
+          <div className="block text-2xl text-muted-foreground/30 md:hidden">↓</div>
+
+          {/* Passo 4 */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-card text-3xl shadow-lg shadow-[#f59e0b]/5">
+              🔥
+            </div>
+            <p className="text-sm font-semibold text-foreground">Streak</p>
+            <p className="text-xs text-muted-foreground">Dias seguidos</p>
+          </div>
+
         </div>
+
+        <p className="mt-6 text-sm font-medium text-[#22c55e]">🎯 Meta!</p>
       </section>
 
       {/* ── CTA ────────────────────────────────────────── */}

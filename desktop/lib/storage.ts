@@ -160,10 +160,22 @@ export async function loadState(): Promise<AppState> {
     const supabase = getSupabase()
     const { data: { session } } = await supabase.auth.getSession()
     if (session?.user) {
-      const server = await loadFromSupabase(session.user.id)
+      let server = await loadFromSupabase(session.user.id)
+
+      // Se não existe perfil no Supabase, cria agora
+      if (!server) {
+        await supabase.from("profiles").upsert({
+          id: session.user.id,
+          email: session.user.email,
+        })
+        server = await loadFromSupabase(session.user.id)
+      }
+
       if (server) return mergeStates(server, local)
     }
-  } catch { /* offline ou erro — segue com localStorage */ }
+  } catch (e) {
+    console.warn("[loadState] Supabase error:", e)
+  }
 
   return local ?? freshState()
 }

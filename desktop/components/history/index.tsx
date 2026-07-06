@@ -54,11 +54,9 @@ export function HistoryModal({ dailyHistory, goalMl, consumedMl, streak, bestStr
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center"
-      onClick={onClose}
     >
       <div
         className="w-full max-w-[440px] rounded-t-3xl border border-border bg-card pb-6 shadow-2xl sm:rounded-3xl"
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-center pt-3">
           <div className="h-1.5 w-10 rounded-full bg-border" />

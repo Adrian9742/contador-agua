@@ -29,11 +29,9 @@ export function SettingsModal({ goalMl, intervalMin, bestStreak, onSave, onClose
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center"
-      onClick={onClose}
     >
       <div
         className="w-full max-w-[440px] rounded-t-3xl border border-border bg-card p-6 shadow-2xl sm:rounded-3xl"
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-base font-semibold">Configurações</h2>

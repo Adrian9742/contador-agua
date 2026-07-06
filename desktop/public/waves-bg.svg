@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 600" fill="none" class="waves-bg">
+  <defs>
+    <linearGradient id="w1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="w2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="w3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Wave 1 (back, slowest) -->
+  <path d="M0 300 C 200 250, 400 350, 600 300 S 1000 250, 1440 300 L1440 600 L0 600 Z"
+        fill="url(#w1)" opacity="0.6">
+    <animate attributeName="d"
+      values="M0 300 C 200 250, 400 350, 600 300 S 1000 250, 1440 300 L1440 600 L0 600 Z;
+              M0 320 C 200 370, 400 270, 600 320 S 1000 370, 1440 320 L1440 600 L0 600 Z;
+              M0 300 C 200 250, 400 350, 600 300 S 1000 250, 1440 300 L1440 600 L0 600 Z"
+      dur="8s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Wave 2 (middle) -->
+  <path d="M0 340 C 300 400, 500 280, 800 340 S 1100 400, 1440 340 L1440 600 L0 600 Z"
+        fill="url(#w2)" opacity="0.5">
+    <animate attributeName="d"
+      values="M0 340 C 300 400, 500 280, 800 340 S 1100 400, 1440 340 L1440 600 L0 600 Z;
+              M0 360 C 300 300, 500 380, 800 360 S 1100 300, 1440 360 L1440 600 L0 600 Z;
+              M0 340 C 300 400, 500 280, 800 340 S 1100 400, 1440 340 L1440 600 L0 600 Z"
+      dur="6s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Wave 3 (front, fastest) -->
+  <path d="M0 370 C 400 320, 600 420, 900 370 S 1200 320, 1440 370 L1440 600 L0 600 Z"
+        fill="url(#w3)" opacity="0.4">
+    <animate attributeName="d"
+      values="M0 370 C 400 320, 600 420, 900 370 S 1200 320, 1440 370 L1440 600 L0 600 Z;
+              M0 390 C 400 440, 600 340, 900 390 S 1200 440, 1440 390 L1440 600 L0 600 Z;
+              M0 370 C 400 320, 600 420, 900 370 S 1200 320, 1440 370 L1440 600 L0 600 Z"
+      dur="4s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Partículas (bolhas) -->
+  <circle cx="200" cy="280" r="3" fill="#38bdf8" opacity="0.2">
+    <animate attributeName="cy" values="280;240;200" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.2;0.05;0" dur="5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="700" cy="260" r="2" fill="#38bdf8" opacity="0.15">
+    <animate attributeName="cy" values="260;220;180" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.15;0.03;0" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1100" cy="290" r="4" fill="#818cf8" opacity="0.15">
+    <animate attributeName="cy" values="290;240;190" dur="6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.15;0.04;0" dur="6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="450" cy="310" r="2.5" fill="#38bdf8" opacity="0.1">
+    <animate attributeName="cy" values="310;270;230" dur="7s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.1;0.02;0" dur="7s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1300" cy="270" r="3" fill="#818cf8" opacity="0.12">
+    <animate attributeName="cy" values="270;220;170" dur="5.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.12;0.03;0" dur="5.5s" repeatCount="indefinite"/>
+  </circle>
+</svg>

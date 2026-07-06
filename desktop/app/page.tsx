@@ -30,7 +30,11 @@ export default function LandingPage() {
       </header>
 
       {/* ── Hero Section ──────────────────────────────── */}
-      <section className="mx-auto flex max-w-5xl flex-col items-center px-6 pt-20 pb-16 text-center md:pt-28">
+      <section className="relative mx-auto flex max-w-5xl flex-col items-center px-6 pt-20 pb-16 text-center md:pt-28 overflow-hidden">
+        {/* Background waves */}
+        <div className="pointer-events-none absolute inset-0 -z-10 opacity-60">
+          <img src="/waves-bg.svg" alt="" className="h-full w-full object-cover" />
+        </div>
         <div className="mb-6 rounded-full bg-[#38bdf8]/10 px-4 py-1.5 text-sm text-[#38bdf8]">
           🚀 App gratuito &bull; Open source
         </div>
@@ -127,6 +131,21 @@ export default function LandingPage() {
             icon={<Droplets className="h-6 w-6 text-[#38bdf8]" />}
             title="Garrafa animada"
             desc="Encha a garrafa virtual a cada gole. Visual satisfatório que motiva a beber mais."
+          />
+        </div>
+      </section>
+
+      {/* ── Como funciona ──────────────────────────────── */}
+      <section className="mx-auto max-w-4xl px-6 py-16 text-center">
+        <h2 className="mb-4 text-3xl font-bold">Como funciona</h2>
+        <p className="mb-10 text-lg text-muted-foreground">
+          Em 4 passos simples você cria o hábito de se hidratar.
+        </p>
+        <div className="mx-auto max-w-3xl">
+          <img
+            src="/how-it-works.svg"
+            alt="Ciclo do app: lembrete → beber → garrafa enche → streak"
+            className="w-full"
           />
         </div>
       </section>

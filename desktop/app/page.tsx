@@ -70,34 +70,15 @@ export default function LandingPage() {
         </div>
 
         {/* Mockup / Screenshot */}
-        <div className="mt-16 w-full max-w-sm rounded-3xl border border-border bg-card p-2 shadow-2xl shadow-[#2563eb]/5">
-          <div className="rounded-2xl bg-[#111827] p-5">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#38bdf8] to-[#2563eb]" />
-                <span className="text-sm font-semibold">Contador de Água</span>
-              </div>
-              <div className="flex gap-1.5">
-                <div className="h-7 w-7 rounded-lg border border-border" />
-                <div className="h-7 w-7 rounded-lg border border-border" />
-              </div>
-            </div>
-            <div className="mt-4 flex items-end justify-between">
-              <div>
-                <p className="text-3xl font-extrabold"><span className="text-[#38bdf8]">1.500</span> ml</p>
-                <p className="text-sm text-muted-foreground">de 2.000 ml</p>
-                <div className="mt-2 h-2 w-24 rounded-full bg-secondary">
-                  <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-[#38bdf8] to-[#2563eb]" />
-                </div>
-              </div>
-              <div className="text-4xl">🫗</div>
-            </div>
-            <div className="mt-4 grid grid-cols-4 gap-2">
-              {["🥛", "🫗", "🧃", "🧴"].map((icon, i) => (
-                <div key={i} className="rounded-xl border border-border bg-card p-2 text-center text-lg">{icon}</div>
-              ))}
-            </div>
-          </div>
+        <div className="mt-16 w-full max-w-xs mx-auto">
+          <img
+            src="/phone-mockup.jpg"
+            alt="App Contador de Água rodando no celular"
+            className="w-full rounded-3xl border border-border shadow-2xl shadow-[#2563eb]/10"
+          />
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            📱 App rodando — 2.500 ml de meta, 70% concluído
+          </p>
         </div>
       </section>
 

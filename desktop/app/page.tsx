@@ -31,8 +31,11 @@ export default function LandingPage() {
 
       {/* ── Hero Section ──────────────────────────────── */}
       <section className="relative mx-auto flex max-w-5xl flex-col items-center px-6 pt-20 pb-16 text-center md:pt-28 overflow-hidden">
-        {/* Background waves */}
-        <div className="pointer-events-none absolute inset-0 -z-10 opacity-60">
+        {/* Background layers */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <img src="/hero-bg.png" alt="" className="h-full w-full object-cover opacity-30" />
+        </div>
+        <div className="pointer-events-none absolute inset-0 -z-10 opacity-40">
           <img src="/waves-bg.svg" alt="" className="h-full w-full object-cover" />
         </div>
         <div className="mb-6 rounded-full bg-[#38bdf8]/10 px-4 py-1.5 text-sm text-[#38bdf8]">
@@ -100,7 +103,35 @@ export default function LandingPage() {
 
       {/* ── Features ──────────────────────────────────── */}
       <section className="mx-auto max-w-5xl px-6 py-20">
-        <h2 className="mb-12 text-center text-3xl font-bold">Por que usar?</h2>
+        <h2 className="mb-4 text-center text-3xl font-bold">Por que usar?</h2>
+        <p className="mb-12 text-center text-lg text-muted-foreground">
+          Mais de 70% do seu corpo é água. O app que te ajuda a manter o hábito.
+        </p>
+
+        {/* Foto + depoimento */}
+        <div className="mb-16 flex flex-col items-center gap-8 md:flex-row md:gap-12">
+          <div className="w-full max-w-sm overflow-hidden rounded-2xl border border-border md:w-1/2">
+            <img
+              src="/man-drinking.jpg"
+              alt="Pessoa bebendo água no escritório"
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <div className="flex flex-col gap-4 md:w-1/2">
+            <div className="inline-flex w-fit rounded-full bg-[#38bdf8]/10 px-3 py-1 text-xs text-[#38bdf8]">
+              📍 Uso real
+            </div>
+            <p className="text-lg leading-relaxed text-muted-foreground md:text-xl">
+              "Eu passo o dia no escritório e sempre esquecia de beber água. 
+              Agora o app me lembra a cada 30 min e meu histórico mostra 
+              que estou bebendo <strong className="text-foreground">3x mais</strong> do que antes."
+            </p>
+            <p className="text-sm text-foreground">
+              <strong>Adrian</strong> — <span className="text-muted-foreground">Criador do Contador de Água</span>
+            </p>
+          </div>
+        </div>
+
         <div className="grid gap-6 md:grid-cols-3">
           <FeatureCard
             icon={<Bell className="h-6 w-6 text-[#38bdf8]" />}

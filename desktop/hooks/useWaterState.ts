@@ -99,6 +99,17 @@ export function useWaterState() {
     return () => clearInterval(interval)
   }, [])
 
+  // ── Countdown visível (a cada 1s) ──────────────────────
+  useEffect(() => {
+    const tick = () => {
+      const elapsed = (Date.now() - lastDrinkRef.current) / 1000
+      setTimeRemaining(Math.round(Math.max(0, intervalMinRef.current * 60 - elapsed)))
+    }
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [])
+
   // ── Mutações ────────────────────────────────────────────
   const setState = useCallback((updater: (prev: AppState) => AppState) => {
     setStateRaw((prev) => {

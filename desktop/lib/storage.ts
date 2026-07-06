@@ -113,15 +113,20 @@ async function saveToSupabase(userId: string, s: AppState): Promise<void> {
 function mergeStates(server: AppState, local: AppState | null): AppState {
   if (!local) return server
 
+  // Dados locais (configurações do usuário) sempre优先 sobre servidor
+  // Servidor tem os defaults (2000ml, 30min), local tem as preferências reais
+  const goalMl = local.goalMl !== DEFAULTS.goalMl ? local.goalMl : server.goalMl
+  const intervalMin = local.intervalMin !== DEFAULTS.intervalMin ? local.intervalMin : server.intervalMin
+
   // Se o dado local é mais recente (tem consumo hoje), prioriza local
   const today = todayISO()
   const localIsToday = local.lastDate === today
   const serverIsToday = server.lastDate === today
 
   if (localIsToday && !serverIsToday) {
-    // Local tem dado de hoje, servidor não → mescla
     return {
       ...server,
+      goalMl, intervalMin,
       consumedMl: local.consumedMl,
       lastDrinkTime: local.lastDrinkTime,
       lastDate: today,
@@ -134,11 +139,12 @@ function mergeStates(server: AppState, local: AppState | null): AppState {
     }
   }
 
-  if (serverIsToday && !localIsToday) return server
+  if (serverIsToday && !localIsToday) return { ...server, goalMl, intervalMin }
 
-  // Ambos têm ou nenhum tem → server wins para configs, local wins para consumo do dia
+  // Ambos têm → local wins para consumo, streak e configs
   return {
     ...server,
+    goalMl, intervalMin,
     consumedMl: localIsToday ? Math.max(server.consumedMl, local.consumedMl) : server.consumedMl,
     lastDrinkTime: Math.max(server.lastDrinkTime, local.lastDrinkTime),
     dailyHistory: {

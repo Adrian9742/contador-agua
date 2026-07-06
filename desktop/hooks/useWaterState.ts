@@ -25,14 +25,19 @@ export function useWaterState() {
   useEffect(() => {
     loadState().then((s) => {
       const today = todayISO()
-      s = applyDayRollover(s, today)
-      if (!s.lastDate) s = { ...s, lastDate: today, lastDrinkTime: Date.now() }
-      const streak = computeStreak(s)
-      s = { ...s, bestStreak: Math.max(s.bestStreak, streak) }
-      saveState(s)
-      lastDrinkRef.current   = s.lastDrinkTime
-      intervalMinRef.current = s.intervalMin
-      setStateRaw(s)
+      const rolled = applyDayRollover(s, today)
+      const next = rolled.lastDate
+        ? rolled
+        : { ...rolled, lastDate: today, lastDrinkTime: Date.now() }
+      const streak = computeStreak(next)
+      const final = { ...next, bestStreak: Math.max(next.bestStreak, streak) }
+      // Só salva se algo mudou (rollover ou streak)
+      if (final.lastDate !== s.lastDate || final.consumedMl !== s.consumedMl || final.bestStreak !== s.bestStreak) {
+        saveState(final)
+      }
+      lastDrinkRef.current   = final.lastDrinkTime
+      intervalMinRef.current = final.intervalMin
+      setStateRaw(final)
       setHydrated(true)
 
       // Pede permissão pra notificação (browser)

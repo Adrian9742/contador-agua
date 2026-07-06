@@ -50,6 +50,14 @@ export function useWaterState() {
   useEffect(() => {
     let lastDate = todayISO()
     let lastNotified = 0
+    let notificationIndex = 0
+    const reminderMessages = [
+      { title: "Hora de beber água! 💧", body: "Seu corpo agradece. Vai um copo agora?" },
+      { title: "💧 Hidratação chegando!", body: "Já passou um tempinho sem beber água. Bora?" },
+      { title: "🔥 Streak em risco!", body: "Não deixe o hábito morrer. Beba água agora!" },
+      { title: "⏰ Toque pra hidratar", body: "Seu cérebro funciona melhor hidratado. Beba!" },
+      { title: "🌊 Hora do copo d'água!", body: "Pare o que está fazendo e beba um gole." },
+    ]
 
     const interval = setInterval(() => {
       const now = Date.now()
@@ -59,9 +67,9 @@ export function useWaterState() {
       if (elapsed >= intervalMinRef.current * 60) {
         if (now - lastNotified > 30_000) { // evita spam
           if (typeof Notification !== "undefined" && Notification.permission === "granted") {
-            new Notification("Hora de beber água! 💧", {
-              body: "Você não bebeu água nos últimos minutos. Beba agora!",
-            })
+            const msg = reminderMessages[notificationIndex % reminderMessages.length]
+            notificationIndex++
+            new Notification(msg.title, { body: msg.body })
           }
           lastNotified = now
         }

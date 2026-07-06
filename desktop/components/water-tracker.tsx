@@ -8,6 +8,7 @@ import { Controls }      from "@/components/controls"
 import { HistoryModal }  from "@/components/history"
 import { SettingsModal } from "@/components/settings"
 import { StreakCard }     from "@/components/streak-card"
+import { OnboardingWelcome } from "@/components/onboarding-welcome"
 import { useWaterState } from "@/hooks/useWaterState"
 import { useAuth }       from "@/hooks/useAuth"
 
@@ -34,9 +35,11 @@ export function WaterTracker() {
   }
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[440px] bg-background text-foreground md:max-w-3xl lg:max-w-5xl md:px-6">
+    <div className="mx-auto min-h-screen w-full max-w-[440px] bg-background text-foreground md:max-w-4xl lg:max-w-6xl md:px-10 lg:px-12">
 
       {/* Modais */}
+      <OnboardingWelcome onFirstDrink={() => addWater(200)} />
+
       {showHistory && (
         <HistoryModal
           dailyHistory={dailyHistory ?? {}}
@@ -104,7 +107,7 @@ export function WaterTracker() {
         </div>
       )}
 
-      <main className="flex flex-col gap-5 px-5 py-5 md:px-0">
+      <main className="flex flex-col gap-5 px-5 py-6 md:px-0 md:py-8">
 
         {/* ── Banner / Timer ──────────────────────────────── */}
         {goalReached ? (
@@ -130,7 +133,7 @@ export function WaterTracker() {
         )}
 
         {/* ── Grid responsivo ──────────────────────────────── */}
-        <div className="flex flex-col gap-5 md:flex-row md:items-start">
+        <div className="flex flex-col gap-5 md:flex-row md:items-start md:gap-10 lg:gap-16">
 
           {/* Coluna esquerda — consumo + garrafa */}
           <div className="flex flex-col gap-5 md:w-1/2">
@@ -156,13 +159,11 @@ export function WaterTracker() {
                 🫗
               </div>
             </div>
-            <div className="scale-100 md:scale-110 md:origin-left">
-              <WaterBottle percentage={percent} goal={goalMl} />
-            </div>
+            <WaterBottle percentage={percent} goal={goalMl} />
           </div>
 
           {/* Coluna direita — controles + streak */}
-          <div className="flex flex-col gap-5 md:w-1/2 md:pt-12">
+          <div className="flex flex-col gap-5 md:w-1/2 md:pt-16">
             {!goalReached && (
               <div className="hidden md:flex items-center gap-2 rounded-2xl border border-border bg-card p-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#38bdf8]/10 text-2xl">⏰</div>

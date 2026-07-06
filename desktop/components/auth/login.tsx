@@ -1,9 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { Droplets, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react"
+import { Droplets, Mail, Lock, Eye, EyeOff, Loader2, AlertTriangle } from "lucide-react"
 import { getSupabase } from "@/lib/supabase"
+
+const MAX_ATTEMPTS = 5
+const LOCKOUT_SECONDS = 30
 
 export function LoginPage() {
   const [email, setEmail] = useState("")
@@ -13,12 +16,36 @@ export function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const [attempts, setAttempts] = useState(0)
+  const [lockout, setLockout] = useState(0)
+  const lockTimer = useRef<NodeJS.Timeout | null>(null)
   const router = useRouter()
+
+  const startLockout = () => {
+    setLockout(LOCKOUT_SECONDS)
+    lockTimer.current = setInterval(() => {
+      setLockout((prev) => {
+        if (prev <= 1) {
+          if (lockTimer.current) clearInterval(lockTimer.current)
+          setAttempts(0)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setSuccess(null)
+
+    // Rate limit check
+    if (lockout > 0) {
+      setError(`Muitas tentativas. Tente novamente em ${lockout}s.`)
+      return
+    }
+
     setLoading(true)
 
     const supabase = getSupabase()
@@ -26,9 +53,14 @@ export function LoginPage() {
     if (mode === "login") {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) {
-        setError(error.message === "Invalid login credentials"
-          ? "Email ou senha incorretos"
-          : error.message)
+        const newAttempts = attempts + 1
+        setAttempts(newAttempts)
+        if (newAttempts >= MAX_ATTEMPTS) {
+          startLockout()
+          setError(`Muitas tentativas. Aguarde ${LOCKOUT_SECONDS}s para tentar novamente.`)
+        } else {
+          setError(`Email ou senha incorretos. Restam ${MAX_ATTEMPTS - newAttempts} tentativas.`)
+        }
       } else {
         router.push("/app")
       }
@@ -106,10 +138,18 @@ export function LoginPage() {
           <p className="rounded-xl bg-green-500/10 px-4 py-3 text-sm text-green-400">{success}</p>
         )}
 
+        {/* Lockout warning */}
+        {lockout > 0 && (
+          <div className="flex items-center gap-2 rounded-xl bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
+            <AlertTriangle className="h-4 w-4 shrink-0" />
+            <span>Muitas tentativas. Aguarde <strong>{lockout}s</strong> para tentar novamente.</span>
+          </div>
+        )}
+
         {/* Submit */}
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || lockout > 0}
           className="flex h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#2563eb] text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50"
         >
           {loading && <Loader2 className="h-4 w-4 animate-spin" />}

@@ -47,8 +47,11 @@ export default function LandingPage() {
             href="/auth"
             className="rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#2563eb] px-6 py-3 text-base font-semibold text-white transition-all hover:opacity-90 hover:scale-105"
           >
-            Começar agora 🥤
+            Começar grátis em 30s
           </Link>
+          <p className="-mt-2 text-xs text-muted-foreground">
+            🥤 Sem cartão. Sem compromisso.
+          </p>
           <a
             href="https://github.com/Adrian9742/contador-agua"
             target="_blank"
@@ -138,7 +141,7 @@ export default function LandingPage() {
           href="/auth"
           className="inline-block rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#2563eb] px-8 py-3 text-lg font-semibold text-white transition-all hover:opacity-90 hover:scale-105"
         >
-          Criar minha conta 🚀
+          Criar conta grátis 🚀
         </Link>
       </section>
 

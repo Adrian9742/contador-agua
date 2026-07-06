@@ -174,3 +174,13 @@
 .animate-bob {
   animation: bob 4s ease-in-out infinite;
 }
+
+/* Suave escala quando bate a meta */
+@keyframes celebrate {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.animate-celebrate {
+  animation: celebrate 1.2s ease-in-out 2;
+}

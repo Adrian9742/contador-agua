@@ -1,0 +1,16 @@
+{
+  "name": "Contador de Água",
+  "short_name": "Contador Água",
+  "description": "Acompanhe seu consumo diário de água e receba lembretes para se hidratar",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1424",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon-dark-32x32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/icon-light-32x32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/apple-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

@@ -91,10 +91,8 @@ export function useWaterState() {
         })
       }
 
-      // Atualiza countdown
-      const remaining = Math.max(0, intervalMinRef.current * 60 - elapsed)
-      setTimeRemaining(Math.round(remaining))
-    }, 10_000) // verifica a cada 10s
+      // Atualiza countdown (redundante com o 1s, só por segurança)
+    }, 10_000)
 
     return () => clearInterval(interval)
   }, [])

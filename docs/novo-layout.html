@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contador de Água — Novo Layout</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0d1424;
+    color: #f7f9fd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    color: #93a0bd;
+    font-size: 14px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .phone-frame {
+    width: 390px;
+    background: #111827;
+    border-radius: 40px;
+    border: 1px solid #1f2a40;
+    overflow: hidden;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+    position: relative;
+  }
+
+  .phone-notch {
+    background: #0d1424;
+    height: 28px;
+    width: 140px;
+    border-radius: 0 0 18px 18px;
+    margin: 0 auto;
+  }
+
+  .phone-content {
+    padding: 0 20px 20px;
+  }
+
+  /* HEADER SIMPLIFICADO */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(31, 42, 64, 0.5);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #38bdf8, #2563eb);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .header-title {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .header-right {
+    display: flex;
+    gap: 6px;
+  }
+
+  .header-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid #1f2a40;
+    background: transparent;
+    color: #93a0bd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 15px;
+  }
+
+  .header-btn:hover {
+    background: #1b2436;
+    color: #f7f9fd;
+  }
+
+  /* CONSUMO */
+  .consumo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0 16px;
+  }
+
+  .consumo-numbers {
+    flex: 1;
+  }
+
+  .consumo-atual {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .consumo-atual span {
+    color: #38bdf8;
+  }
+
+  .consumo-meta {
+    font-size: 18px;
+    color: #93a0bd;
+    font-weight: 400;
+    margin-top: 4px;
+  }
+
+  .consumo-percent {
+    font-size: 14px;
+    font-weight: 500;
+    color: #38bdf8;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .consumo-percent .bar {
+    width: 80px;
+    height: 4px;
+    background: #1f2a40;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .consumo-percent .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8, #2563eb);
+    border-radius: 4px;
+    width: 75%;
+    transition: width 0.5s;
+  }
+
+  .minibottle {
+    font-size: 72px;
+    line-height: 1;
+    filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.2));
+  }
+
+  /* TIMER */
+  .timer-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .timer-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #1b2436;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #93a0bd;
+  }
+
+  .timer-chip .time {
+    color: #38bdf8;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  /* GARRAFA ANIMADA */
+  .bottle-section {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0 20px;
+    position: relative;
+  }
+
+  .bottle-wrapper {
+    position: relative;
+    width: 160px;
+    height: 280px;
+  }
+
+  .bottle-cap {
+    width: 60px;
+    height: 18px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px 8px 0 0;
+    margin: 0 auto;
+  }
+  .bottle-neck {
+    width: 44px;
+    height: 12px;
+    background: rgba(255,255,255,0.08);
+    margin: -2px auto 0;
+    border-radius: 4px;
+  }
+  .bottle-body {
+    position: relative;
+    width: 160px;
+    height: 240px;
+    background: rgba(27, 36, 54, 0.6);
+    border: 1px solid #1f2a40;
+    border-radius: 36px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    margin-top: 4px;
+  }
+
+  .water-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 75%;
+    background: linear-gradient(to bottom, rgba(56, 189, 248, 0.4), rgba(37, 99, 235, 0.6));
+    transition: height 0.7s ease-out;
+    border-radius: 0 0 35px 35px;
+  }
+
+  .wave-top {
+    position: absolute;
+    top: -8px;
+    left: -20px;
+    width: 200%;
+    height: 20px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 24'%3E%3Cpath d='M0 12 C 20 0, 40 0, 60 12 S 100 24, 120 12 L120 24 L0 24 Z' fill='rgba(56,189,248,0.3)'/%3E%3C/svg%3E") repeat-x;
+    animation: waveAnim 2.2s linear infinite;
+    opacity: 0.7;
+  }
+
+  .wave-top-2 {
+    position: absolute;
+    top: -5px;
+    left: -20px;
+    width: 200%;
+    height: 16px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 24'%3E%3Cpath d='M0 12 C 20 0, 40 0, 60 12 S 100 24, 120 12 L120 24 L0 24 Z' fill='rgba(37,99,235,0.3)'/%3E%3C/svg%3E") repeat-x;
+    animation: waveAnim 3.6s linear infinite;
+    opacity: 0.5;
+  }
+
+  @keyframes waveAnim {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .shine {
+    position: absolute;
+    left: 24px;
+    top: 16px;
+    width: 16px;
+    height: 200px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,0.05), transparent);
+    border-radius: 10px;
+  }
+
+  .bottle-percent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(17, 24, 39, 0.85);
+    border: 1px solid #1f2a40;
+    border-radius: 12px;
+    padding: 4px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #f7f9fd;
+    z-index: 2;
+  }
+
+  .bottle-scale {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px 0;
+    margin-left: 12px;
+    font-size: 11px;
+    color: #5b6680;
+  }
+
+  .scale-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .scale-line {
+    width: 16px;
+    height: 1px;
+    background: #1f2a40;
+  }
+
+  /* CONTROLES */
+  .controls-label {
+    font-size: 12px;
+    color: #5b6680;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .quick-adds {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .quick-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 4px;
+    border-radius: 16px;
+    border: 1px solid #1f2a40;
+    background: rgba(27, 36, 54, 0.4);
+    color: #f7f9fd;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .quick-btn:hover {
+    border-color: #38bdf8;
+    background: rgba(37, 99, 235, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .quick-btn:active {
+    transform: translateY(0);
+  }
+
+  .quick-btn .icon {
+    font-size: 20px;
+  }
+
+  .quick-btn .label {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .quick-btn .amount {
+    font-size: 11px;
+    color: #93a0bd;
+  }
+
+  /* INPUT MANUAL */
+  .manual-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .manual-input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 1px solid #1f2a40;
+    background: rgba(27, 36, 54, 0.4);
+    color: #f7f9fd;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .manual-input:focus {
+    border-color: #38bdf8;
+  }
+
+  .manual-input::placeholder {
+    color: #5b6680;
+  }
+
+  .add-btn {
+    padding: 12px 20px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, #38bdf8, #2563eb);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .add-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+
+  /* STREAK */
+  .streak-card {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px solid #1f2a40;
+    background: rgba(27, 36, 54, 0.3);
+  }
+
+  .streak-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .streak-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .streak-fire {
+    width: 40px;
+    height: 40px;
+    background: rgba(251, 146, 60, 0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .streak-num {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .streak-label {
+    font-size: 13px;
+    color: #93a0bd;
+  }
+
+  .streak-record {
+    text-align: right;
+  }
+
+  .streak-record-label {
+    font-size: 11px;
+    color: #5b6680;
+  }
+
+  .streak-record-num {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .week-row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .day-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .day-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .day-circle.done {
+    background: #2563eb;
+    color: white;
+  }
+
+  .day-circle.today {
+    background: conic-gradient(#38bdf8 65%, #1f2a40 65% 100%);
+  }
+
+  .day-circle.today .inner {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #f7f9fd;
+  }
+
+  .day-circle.fail {
+    border: 1px solid #1f2a40;
+    background: transparent;
+  }
+
+  .day-label {
+    font-size: 11px;
+    color: #5b6680;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 16px 0 8px;
+  }
+
+  .reset-btn {
+    background: none;
+    border: none;
+    color: #5b6680;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.2s;
+  }
+
+  .reset-btn:hover {
+    color: #f87171;
+  }
+
+  .copyright {
+    font-size: 11px;
+    color: rgba(91, 102, 128, 0.5);
+    margin-top: 12px;
+  }
+
+  /* GOAL REACHED BANNER */
+  .goal-banner {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(56, 189, 248, 0.1));
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: 16px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .goal-banner .icon {
+    font-size: 28px;
+  }
+
+  .goal-banner .text {
+    font-weight: 600;
+    font-size: 15px;
+    color: #22c55e;
+  }
+
+  .goal-banner .sub {
+    font-size: 12px;
+    color: #93a0bd;
+  }
+
+  /* COMPARAÇÃO */
+  .comparison {
+    max-width: 800px;
+    width: 100%;
+    margin-top: 40px;
+    background: #111827;
+    border-radius: 16px;
+    border: 1px solid #1f2a40;
+    padding: 24px;
+  }
+
+  .comparison h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .comp-card {
+    padding: 16px;
+    border-radius: 12px;
+    background: #1b2436;
+  }
+
+  .comp-card h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .comp-card ul {
+    list-style: none;
+    font-size: 13px;
+    color: #93a0bd;
+    line-height: 1.8;
+  }
+
+  .comp-card ul li::before {
+    content: "• ";
+    color: #38bdf8;
+  }
+
+  .badge-old {
+    color: #f87171;
+  }
+  .badge-new {
+    color: #22c55e;
+  }
+
+  @media (max-width: 500px) {
+    .phone-frame {
+      width: 100%;
+      border-radius: 20px;
+    }
+    h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+  <h1>💧 Novo Visual</h1>
+  <p class="subtitle">Layout mais confortável e acolhedor para o usuário</p>
+
+  <!-- SIMULADOR DO NOVO LAYOUT -->
+  <div class="phone-frame">
+    <div class="phone-notch"></div>
+    <div class="phone-content">
+
+      <!-- Header limpo -->
+      <div class="header">
+        <div class="header-left">
+          <div class="logo-icon">💧</div>
+          <span class="header-title">Contador de Água</span>
+        </div>
+        <div class="header-right">
+          <button class="header-btn" title="Configurações">⚙️</button>
+          <button class="header-btn" title="Histórico">📊</button>
+        </div>
+      </div>
+
+      <!-- Meta atingida (aparece quando bate a meta) -->
+      <div class="goal-banner">
+        <span class="icon">🎉</span>
+        <div>
+          <div class="text">Meta diária atingida! 🥤</div>
+          <div class="sub">2.000 ml consumidos — parabéns!</div>
+        </div>
+      </div>
+
+      <!-- Consumo -->
+      <div class="consumo">
+        <div class="consumo-numbers">
+          <div class="consumo-atual"><span>1.500</span> ml</div>
+          <div class="consumo-meta">de 2.000 ml</div>
+          <div class="consumo-percent">
+            <span>75%</span>
+            <div class="bar"><div class="bar-fill" style="width:75%"></div></div>
+          </div>
+        </div>
+        <div class="minibottle">🫗</div>
+      </div>
+
+      <!-- Timer -->
+      <div class="timer-row">
+        <div class="timer-chip">
+          ⏰ Próximo lembrete: <span class="time">18:30</span>
+        </div>
+        <div class="timer-chip">
+          🔔 A cada <span class="time">30 min</span>
+        </div>
+      </div>
+
+      <!-- Garrafa -->
+      <div class="bottle-section">
+        <div class="bottle-wrapper">
+          <div class="bottle-cap"></div>
+          <div class="bottle-neck"></div>
+          <div class="bottle-body">
+            <div class="water-fill" style="height:75%">
+              <div class="wave-top"></div>
+              <div class="wave-top-2"></div>
+            </div>
+            <div class="shine"></div>
+            <div class="bottle-percent">75%</div>
+          </div>
+        </div>
+        <div class="bottle-scale">
+          <div class="scale-item"><div class="scale-line"></div>2.000 ml</div>
+          <div class="scale-item"><div class="scale-line"></div>1.000 ml</div>
+          <div class="scale-item"><div class="scale-line"></div>0 ml</div>
+        </div>
+      </div>
+
+      <!-- Controles -->
+      <div class="controls-label">➕ Adicionar consumo</div>
+      <div class="quick-adds">
+        <button class="quick-btn">
+          <span class="icon">🥛</span>
+          <span class="label">Copo</span>
+          <span class="amount">200 ml</span>
+        </button>
+        <button class="quick-btn">
+          <span class="icon">🫗</span>
+          <span class="label">Gole</span>
+          <span class="amount">250 ml</span>
+        </button>
+        <button class="quick-btn">
+          <span class="icon">🧃</span>
+          <span class="label">Dose</span>
+          <span class="amount">500 ml</span>
+        </button>
+        <button class="quick-btn">
+          <span class="icon">🧴</span>
+          <span class="label">Garrafa</span>
+          <span class="amount">750 ml</span>
+        </button>
+      </div>
+
+      <!-- Input manual -->
+      <div class="manual-row">
+        <input class="manual-input" type="text" placeholder="Quantidade em ml" value="350">
+        <button class="add-btn">+ Adicionar</button>
+      </div>
+
+      <!-- Streak -->
+      <div class="streak-card">
+        <div class="streak-header">
+          <div class="streak-left">
+            <div class="streak-fire">🔥</div>
+            <div>
+              <div class="streak-num">3 dias seguidos</div>
+              <div class="streak-label">Continue assim! 💪</div>
+            </div>
+          </div>
+          <div class="streak-record">
+            <div class="streak-record-label">Recorde</div>
+            <div class="streak-record-num">🏆 12 dias</div>
+          </div>
+        </div>
+        <div class="week-row">
+          <div class="day-item"><div class="day-circle done">✓</div><span class="day-label">Dom</span></div>
+          <div class="day-item"><div class="day-circle done">✓</div><span class="day-label">Seg</span></div>
+          <div class="day-item"><div class="day-circle done">✓</div><span class="day-label">Ter</span></div>
+          <div class="day-item"><div class="day-circle today"><div class="inner">65%</div></div><span class="day-label">Qua</span></div>
+          <div class="day-item"><div class="day-circle fail"></div><span class="day-label">Qui</span></div>
+          <div class="day-item"><div class="day-circle fail"></div><span class="day-label">Sex</span></div>
+          <div class="day-item"><div class="day-circle fail"></div><span class="day-label">Sáb</span></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <button class="reset-btn">⟳ Resetar dia</button>
+        <div class="copyright">© 2025 Adrian Souza</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COMPARAÇÃO -->
+  <div class="comparison">
+    <h2>📋 O que mudou no layout</h2>
+    <div class="comparison-grid">
+      <div class="comp-card">
+        <h3><span class="badge-old">❌</span> Antes</h3>
+        <ul>
+          <li>Header poluído (5 botões + countdown)</li>
+          <li>Números soltos sem suporte visual</li>
+          <li>Garrafa pequena e apertada</li>
+          <li>Streak espremido</li>
+          <li>Botões de controle genéricos</li>
+          <li>Meta atingida sem graça</li>
+          <li>Navegação confusa</li>
+        </ul>
+      </div>
+      <div class="comp-card">
+        <h3><span class="badge-new">✅</span> Depois</h3>
+        <ul>
+          <li>Header limpo (só 2 botões)</li>
+          <li>Número grande em destaque com barra de progresso</li>
+          <li>Garrafa maior com brilho e ondas visíveis</li>
+          <li>Streak com fire icon e mais espaçado</li>
+          <li>Botões com ícones intuitivos + padding confortável</li>
+          <li>Banner verde quando atinge a meta 🎉</li>
+          <li>Timer em chip discreto</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOVAS CORES -->
+  <div class="comparison" style="margin-top: 20px;">
+    <h2>🎨 Paleta de cores (mais acolhedora)</h2>
+    <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+      <div style="width: 80px; height: 80px; border-radius: 12px; background: linear-gradient(135deg, #38bdf8, #2563eb); display: flex; align-items: end; padding: 6px; font-size: 9px; color: white; font-weight: 500;">Azul água</div>
+      <div style="width: 80px; height: 80px; border-radius: 12px; background: #111827; border: 1px solid #1f2a40; display: flex; align-items: end; padding: 6px; font-size: 9px; color: white; font-weight: 500;">Card escuro</div>
+      <div style="width: 80px; height: 80px; border-radius: 12px; background: #1b2436; display: flex; align-items: end; padding: 6px; font-size: 9px; color: #93a0bd; font-weight: 500;">Card hover</div>
+      <div style="width: 80px; height: 80px; border-radius: 12px; background: linear-gradient(135deg, #22c55e, #16a34a); display: flex; align-items: end; padding: 6px; font-size: 9px; color: white; font-weight: 500;">Meta verde</div>
+      <div style="width: 80px; height: 80px; border-radius: 12px; background: linear-gradient(135deg, #818cf8, #6366f1); display: flex; align-items: end; padding: 6px; font-size: 9px; color: white; font-weight: 500;">Roxo acento</div>
+    </div>
+    <ul style="margin-top: 16px; font-size: 13px; color: #93a0bd; line-height: 1.8;">
+      <li>Background: #0d1424 → mantido (contraste excelente)</li>
+      <li>Cards: #111827 → mais suave que o preto puro</li>
+      <li>Gradiente água: #38bdf8 → #2563eb → mais vivo</li>
+      <li>Meta: verde (#22c55e) → mais celebrativo</li>
+      <li>Texto secundário: #93a0bd → mais legível</li>
+    </ul>
+  </div>
+
+</body>
+</html>

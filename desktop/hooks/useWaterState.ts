@@ -21,7 +21,7 @@ export function useWaterState() {
   const lastDrinkRef   = useRef(Date.now())
   const intervalMinRef = useRef(30)
 
-  // ── Carga inicial (async — suporta electronAPI) ───────────────────────────
+  // ── Carga inicial ───────────────────────────────────────
   useEffect(() => {
     loadState().then((s) => {
       const today = todayISO()
@@ -35,9 +35,9 @@ export function useWaterState() {
       setStateRaw(s)
       setHydrated(true)
 
+      // Pede permissão pra notificação (browser)
       if (
         typeof window !== "undefined" &&
-        !window.electronAPI &&
         typeof Notification !== "undefined" &&
         Notification.permission === "default"
       ) {
@@ -46,32 +46,47 @@ export function useWaterState() {
     })
   }, [])
 
-  // ── Eventos do processo principal Electron ────────────────────────────────
+  // ── Polling: lembrete + reset meia-noite (web) ────────
   useEffect(() => {
-    if (typeof window === "undefined" || !window.electronAPI) return
-    window.electronAPI.onReminder(() => { /* lembrete já disparado como notificação nativa */ })
-    window.electronAPI.onMidnightReset(() => {
-      setStateRaw((prev) => {
-        const today = todayISO()
-        const next = applyDayRollover(prev, today)
-        saveState(next)
-        return next
-      })
-    })
+    let lastDate = todayISO()
+    let lastNotified = 0
+
+    const interval = setInterval(() => {
+      const now = Date.now()
+      const elapsed = (now - lastDrinkRef.current) / 1000
+
+      // Verifica lembrete
+      if (elapsed >= intervalMinRef.current * 60) {
+        if (now - lastNotified > 30_000) { // evita spam
+          if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+            new Notification("Hora de beber água! 💧", {
+              body: "Você não bebeu água nos últimos minutos. Beba agora!",
+            })
+          }
+          lastNotified = now
+        }
+      }
+
+      // Verifica meia-noite (reset automático)
+      const today = todayISO()
+      if (today !== lastDate) {
+        lastDate = today
+        setStateRaw((prev) => {
+          const next = applyDayRollover(prev, today)
+          saveState(next)
+          return next
+        })
+      }
+
+      // Atualiza countdown
+      const remaining = Math.max(0, intervalMinRef.current * 60 - elapsed)
+      setTimeRemaining(Math.round(remaining))
+    }, 10_000) // verifica a cada 10s
+
+    return () => clearInterval(interval)
   }, [])
 
-  // ── Countdown ─────────────────────────────────────────────────────────────
-  useEffect(() => {
-    const tick = () => {
-      const elapsed = (Date.now() - lastDrinkRef.current) / 1000
-      setTimeRemaining(Math.round(Math.max(0, intervalMinRef.current * 60 - elapsed)))
-    }
-    tick()
-    const id = setInterval(tick, 1000)
-    return () => clearInterval(id)
-  }, [])
-
-  // ── Mutações ──────────────────────────────────────────────────────────────
+  // ── Mutações ────────────────────────────────────────────
   const setState = useCallback((updater: (prev: AppState) => AppState) => {
     setStateRaw((prev) => {
       const next = updater(prev)
@@ -88,10 +103,10 @@ export function useWaterState() {
       const consumed = Math.min(prev.goalMl, prev.consumedMl + Math.max(0, ml))
       const goalJustReached = consumed >= prev.goalMl && prev.consumedMl < prev.goalMl
       if (goalJustReached) {
-        if (typeof window !== "undefined" && window.electronAPI) {
-          window.electronAPI.notifyGoal()
-        } else if (typeof Notification !== "undefined" && Notification.permission === "granted") {
-          new Notification("Meta diária atingida! 🎉", { body: `Você bebeu ${prev.goalMl} ml hoje!` })
+        if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+          new Notification("Meta diária atingida! 🎉", {
+            body: `Você bebeu ${prev.goalMl} ml hoje!`,
+          })
         }
       }
       return { ...prev, consumedMl: consumed, lastDrinkTime: Date.now() }
@@ -110,7 +125,7 @@ export function useWaterState() {
   const setGoal        = useCallback((ml: number)  => setState((p) => ({ ...p, goalMl: Math.max(100, ml) })), [setState])
   const setIntervalMin = useCallback((min: number) => setState((p) => ({ ...p, intervalMin: Math.max(1, min), lastDrinkTime: Date.now() })), [setState])
 
-  // ── Valores derivados ─────────────────────────────────────────────────────
+  // ── Valores derivados ───────────────────────────────────
   const percent     = Math.min(100, Math.round((state.consumedMl / Math.max(1, state.goalMl)) * 100))
   const remaining   = Math.max(0, state.goalMl - state.consumedMl)
   const streak      = computeStreak(state)

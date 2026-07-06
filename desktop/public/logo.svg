@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="shineGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.4)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+    <clipPath id="dropClip">
+      <path d="M256 40 C256 40 120 220 120 320 C120 395.1 180.9 456 256 456 C331.1 456 392 395.1 392 320 C392 220 256 40 256 40Z"/>
+    </clipPath>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Sombra -->
+  <ellipse cx="256" cy="460" rx="140" ry="20" fill="rgba(0,0,0,0.15)" filter="url(#glow)"/>
+
+  <!-- Gota principal -->
+  <path d="M256 40 C256 40 120 220 120 320 C120 395.1 180.9 456 256 456 C331.1 456 392 395.1 392 320 C392 220 256 40 256 40Z"
+        fill="url(#waterGrad)" filter="url(#glow)"/>
+
+  <!-- Onda dentro da gota -->
+  <g clip-path="url(#dropClip)" opacity="0.2">
+    <path d="M0 340 Q80 310 160 340 Q240 370 320 340 Q400 310 512 340 L512 512 L0 512Z"
+          fill="white" opacity="0.3">
+      <animate attributeName="d"
+        values="M0 340 Q80 310 160 340 Q240 370 320 340 Q400 310 512 340 L512 512 L0 512Z;
+                M0 355 Q80 380 160 355 Q240 330 320 355 Q400 380 512 355 L512 512 L0 512Z;
+                M0 340 Q80 310 160 340 Q240 370 320 340 Q400 310 512 340 L512 512 L0 512Z"
+        dur="4s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0 370 Q80 345 160 370 Q240 395 320 370 Q400 345 512 370 L512 512 L0 512Z"
+          fill="white" opacity="0.15">
+      <animate attributeName="d"
+        values="M0 370 Q80 345 160 370 Q240 395 320 370 Q400 345 512 370 L512 512 L0 512Z;
+                M0 385 Q80 410 160 385 Q240 360 320 385 Q400 410 512 385 L512 512 L0 512Z;
+                M0 370 Q80 345 160 370 Q240 395 320 370 Q400 345 512 370 L512 512 L0 512Z"
+        dur="5s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Brilho na gota -->
+  <ellipse cx="210" cy="160" rx="45" ry="70" fill="url(#shineGrad)" transform="rotate(-20, 210, 160)"/>
+
+  <!-- Bolhas -->
+  <circle cx="290" cy="280" r="6" fill="white" opacity="0.25">
+    <animate attributeName="cy" values="280;240;200" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.25;0.1;0" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="230" cy="320" r="4" fill="white" opacity="0.2">
+    <animate attributeName="cy" values="320;280;240" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.2;0.08;0" dur="4s" repeatCount="indefinite"/>
+  </circle>
+</svg>

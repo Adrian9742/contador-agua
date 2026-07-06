@@ -41,8 +41,8 @@ export function WaterBottle({ percentage, goal = 2000 }: WaterBottleProps) {
           <div className="pointer-events-none absolute left-7 top-6 h-40 w-1.5 rounded-full bg-white/20" />
 
           {/* Percentage badge */}
-          <div className="absolute left-1/2 top-5 -translate-x-1/2">
-            <span className="rounded-full bg-card/90 px-3 py-1 text-sm font-semibold text-foreground shadow-sm ring-1 ring-border">
+          <div className="absolute left-1/2 top-5 -translate-x-1/2 z-10">
+            <span className="rounded-full bg-card/90 px-3 py-1 text-sm font-semibold text-foreground shadow-sm ring-1 ring-border shadow-[#38bdf8]/10">
               {Math.round(clamped)}%
             </span>
           </div>

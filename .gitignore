@@ -26,3 +26,9 @@ config.json
 .DS_Store
 *.zip
 Thumbs.db
+
+# Local IDE / workspace
+.hermes/
+IDEA.md
+desktop/archive/
+desktop/.env.local
